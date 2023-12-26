@@ -53,12 +53,12 @@ const Login = (props: Props) => {
             }}
             onSubmit={(values, actions) => {
               console.log(values);
-
               axios.post("http://localhost:8080/login/", values).then((res) => {
-                console.log(res.data);
-                localStorage.setItem("token", res.data);
-
-                navigate("/home");
+                console.log(res.status);
+                if (res.status == 200) {
+                  localStorage.setItem("token", res.data);
+                  navigate("/home");
+                }
               });
             }}
           >
@@ -143,6 +143,7 @@ const Login = (props: Props) => {
                       borderRadius: "20px",
                       color: "white",
                       width: "330px",
+                      cursor: "pointer",
                     }}
                   >
                     Login

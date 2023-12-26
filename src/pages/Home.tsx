@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 type Props = {};
 
 const Home = (props: Props) => {
@@ -11,7 +12,7 @@ const Home = (props: Props) => {
     console.log(token);
     axios("http://localhost:8080/home", {
       headers: {
-        Authorization: `barear ${token}`,
+        Authorization: `bearer ${token}`,
       },
     }).then((res) => {
       console.log(res.data);
@@ -19,23 +20,26 @@ const Home = (props: Props) => {
     });
   }, []);
   return (
-    <div>
-      Home
-      <>
-        <ul>
-          {data &&
-            data.map((elem, i) => {
-              return <li key={i}>{elem.username}</li>;
-            })}
-        </ul>
-      </>
-      <button>
-        <Link to="/">Login</Link>
-      </button>
-      <button>
-        <Link to="/register">Register</Link>
-      </button>
-    </div>
+    <>
+      <Navbar />
+      <div>
+        Home
+        <>
+          <ul>
+            {data &&
+              data.map((elem, i) => {
+                return <li key={i}>{elem.username}</li>;
+              })}
+          </ul>
+        </>
+        <button>
+          <Link to="/">Login</Link>
+        </button>
+        <button>
+          <Link to="/register">Register</Link>
+        </button>
+      </div>
+    </>
   );
 };
 

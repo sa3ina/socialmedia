@@ -8,7 +8,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { v4 as uuidv4 } from "uuid";
 const Register = (props: Props) => {
   const navigate = useNavigate();
   return (
@@ -19,7 +19,6 @@ const Register = (props: Props) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-
           minHeight: "100vh",
         }}
       >
@@ -51,7 +50,12 @@ const Register = (props: Props) => {
             }}
             onSubmit={(values) => {
               console.log(values);
-              axios.post("http://localhost:8080/users/", values).then((res) => {
+              let id = uuidv4();
+              let obj = {
+                id,
+                ...values,
+              };
+              axios.post("http://localhost:8080/users/", obj).then((res) => {
                 console.log(res);
 
                 if (res.status == 201) {
@@ -202,6 +206,7 @@ const Register = (props: Props) => {
                       borderRadius: "20px",
                       color: "white",
                       width: "330px",
+                      cursor: "pointer",
                     }}
                   >
                     Register
