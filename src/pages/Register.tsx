@@ -33,7 +33,6 @@ const Register = (props: Props) => {
                 errors.username = "required";
               }
 
-              // Email Validation
               if (!values.email) {
                 errors.email = "required";
               } else if (
@@ -42,7 +41,6 @@ const Register = (props: Props) => {
                 errors.email = "invalid email address";
               }
 
-              // Password Validation
               if (!values.password) {
                 errors.password = "required";
               } else if (values.password.length < 8) {
