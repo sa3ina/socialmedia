@@ -17,28 +17,12 @@ import { Link } from "react-router-dom";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import PeopleIcon from "@mui/icons-material/People";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useEffect } from "react";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 function Navbar() {
-  const [search, setSearch] = useState<string>("");
-  const [showResults, setShowResults] = useState<boolean>(false);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
-  //   const dispatch = useDispatch();
-  //   const { news, loading, error } = useSelector(
-  //     (state: RootState) => state.news
-  //   );
-  //   let newsData = news;
-  //   useEffect(() => {
-  //     dispatch(fetchNews());
-  //   }, [dispatch]);
-  //   console.log(newsData);
-
-  //   const filteredNews = newsData.filter((item) =>
-  //     item.title.toLowerCase().includes(search.toLowerCase())
-  //   );
-  //   console.log(filteredNews);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -51,18 +35,20 @@ function Navbar() {
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: "#1E293B",
-        marginBottom: "30px",
+        backgroundColor: "#FEFEFE",
+
         height: "60px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        // padding: { xl: "0 30px", md: "0 30px" },
+        boxShadow: 0,
+        borderBottom: "1px solid #F1F5F8",
+
+        padding: { xl: "0 30px", lg: "0 30px", md: "0", xs: "0", sm: "0" },
       }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
           <Box
             component="a"
             href="#app-bar-with-responsive-menu"
@@ -82,16 +68,25 @@ function Navbar() {
                 to="/home"
                 style={{
                   textDecoration: "none",
-                  fontSize: "20px",
-                  color: "white",
+                  fontSize: "28px",
+                  color: "#545D6B",
+                  fontFamily: "Dancing Script",
                 }}
               >
-                Micom
                 {/* <img
-                  src="https://cdn.shopify.com/s/files/1/0558/6413/1764/files/Blue_Logo_Design_7_1024x1024.png?v=1677204656"
+                  src="https://www.pngall.com/wp-content/uploads/14/Pink-Bow-No-Background.png"
                   alt="Logo"
-                  style={{ maxWidth: "150px", width: "100%", height: "auto" }}
-                /> */}
+                  style={{
+                    maxWidth: "30px",
+
+                    height: "auto",
+                    // transform: "rotate(340deg)",
+                    position: "absolute",
+                    top: "30px",
+                    left: "-10px",
+                  }}
+                />{" "} */}
+                Micom
               </Link>
             </Box>
           </Box>
@@ -126,38 +121,40 @@ function Navbar() {
               }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Notification</Typography>
+                <Link
+                  to="/notif"
+                  style={{ color: "black", textDecoration: "none" }}
+                >
+                  <Typography textAlign="center">Notification</Typography>
+                </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Friends</Typography>
+                <Link to="/" style={{ color: "black", textDecoration: "none" }}>
+                  <Typography textAlign="center">Friends</Typography>
+                </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Profile</Typography>
+                <Link
+                  to="/profile"
+                  style={{ color: "black", textDecoration: "none" }}
+                >
+                  <Typography textAlign="center">Profile</Typography>{" "}
+                </Link>
               </MenuItem>
 
-              {/* <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">NewsLetter</Typography>
-              </MenuItem> */}
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Link
+                  to="/direct"
+                  style={{ color: "black", textDecoration: "none" }}
+                >
+                  <Typography textAlign="center">Messages</Typography>
+                </Link>
+              </MenuItem>
             </Menu>
           </Box>
+
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                color: "white",
-                display: "block",
-                fontWeight: "900",
-                "&:hover": {
-                  color: "white",
-                },
-              }}
-            >
-              <CircleNotificationsIcon
-                style={{ color: "#8A89C0", fontSize: "30px" }}
-              />
-            </Button>
-            <Link to="/about">
+            <Link to="/notif">
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{
@@ -166,74 +163,92 @@ function Navbar() {
                   display: "block",
                   fontWeight: "900",
                   "&:hover": {
-                    color: "white",
+                    color: "grey",
+                  },
+                }}
+              >
+                <CircleNotificationsIcon
+                  style={{ color: "#8A89C0", fontSize: "30px" }}
+                />
+              </Button>
+            </Link>
+            <Link to="/direct">
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  fontWeight: "900",
+                  "&:hover": {
+                    color: "grey",
+                  },
+                }}
+              >
+                <MailOutlineIcon
+                  style={{ color: "#8A89C0", fontSize: "30px" }}
+                />
+              </Button>
+            </Link>
+            <Link to="/">
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  color: "#8A89C0",
+                  display: "block",
+                  fontWeight: "700",
+                  "&:hover": {
+                    color: "grey",
                   },
                 }}
               >
                 <PeopleIcon style={{ color: "#8A89C0", fontSize: "30px" }} />
               </Button>
             </Link>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                color: "#8A89C0",
-                display: "block",
-                fontWeight: "700",
-                "&:hover": {
-                  color: "white",
-                },
-              }}
-            >
-              <AccountCircleIcon style={{ fontSize: "30px" }} />
-            </Button>
-            <Button>
-              <input
-                type="text"
-                style={{
-                  borderRadius: "10px",
-                  borderWidth: "1px",
-                  borderColor: "grey",
+            <Link to="/profile">
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  color: "#8A89C0",
+                  display: "block",
+                  fontWeight: "700",
                 }}
-                // onChange={(e) => {
-                //   setSearch(e.target.value);
-                //   setShowResults(!!e.target.value);
-                // }}
-              />{" "}
-              <SearchIcon style={{ color: "#8A89C0" }} />
-            </Button>
-            {/* <div
-              style={{
-                position: "absolute",
-                top: "40px",
-                left: "0",
-                width: "100%",
-                background: "white",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                zIndex: "4556",
-                color: "black",
-                marginTop: "30px",
-                display: showResults ? "block" : "none",
-              }}
-            >
-              <ul>
-                {filteredNews.map((result, index) => (
-                  <a
-                    href={result.url}
-                    style={{ color: "black", textDecoration: "none" }}
-                  >
-                    <li
-                      style={{ listStyleType: "none", padding: "3px" }}
-                      key={index}
-                    >
-                      {" "}
-                      <SearchIcon style={{ height: "20px" }} />
-                      {result.title}
-                    </li>
-                  </a>
-                ))}
-              </ul>
-            </div> */}
+              >
+                <AccountCircleIcon style={{ fontSize: "30px" }} />
+              </Button>
+            </Link>
+            <Link to="/search">
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#8A89C0",
+                  fontWeight: "700",
+                }}
+              >
+                <div
+                  style={{
+                    borderRadius: "10px",
+                    position: "relative",
+                    border: "none",
+                    backgroundColor: "#E2E8F0",
+                    width: "170px",
+                    height: "30px",
+                    marginBottom: "4px",
+                  }}
+                >
+                  {" "}
+                </div>
+                <SearchIcon
+                  style={{
+                    color: "#8A89C0",
+                    position: "absolute",
+                    right: "15px",
+                  }}
+                />
+              </Button>
+            </Link>
           </Box>
         </Toolbar>
       </Container>

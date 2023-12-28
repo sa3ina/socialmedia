@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+
 const Login = (props: Props) => {
   const navigate = useNavigate();
   return (
@@ -40,24 +41,17 @@ const Login = (props: Props) => {
             initialValues={{ username: "", password: "" }}
             validate={(values) => {
               const errors = {};
-              // if (!values.username) {
-              //   errors.username = "Required";
-              // } else if (
-              //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-              //     values.username
-              //   )
-              // ) {
-              //   errors.username = "Invalid username address";
-              // }
               return errors;
             }}
             onSubmit={(values, actions) => {
               console.log(values);
               axios.post("http://localhost:8080/login/", values).then((res) => {
                 console.log(res.status);
+
                 if (res.status == 200) {
-                  localStorage.setItem("token", res.data);
+                  localStorage.setItem("loggedInUser", JSON.stringify(values));
                   navigate("/home");
+                  localStorage.setItem("token", res.data);
                 }
               });
             }}
