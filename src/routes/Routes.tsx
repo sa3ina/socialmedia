@@ -7,6 +7,7 @@ import Search from "../pages/Search";
 import Detail from "../pages/Detail";
 import MyProfile from "../pages/MyProfile";
 import Notifications from "../pages/Notifications";
+import Following from "../pages/Following";
 export const routes = [
   {
     path: "/",
@@ -43,6 +44,10 @@ export const routes = [
       {
         path: "/notif",
         element: <Notifications />,
+      },
+      {
+        path: "/following",
+        element: <Following />,
       },
     ],
   },

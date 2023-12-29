@@ -98,7 +98,8 @@ function Navbar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              sx={{ color: "#8A89C0" }}
+              sx={{ color: "#1F7AD3" }}
+              className="icons"
             >
               <MenuIcon />
             </IconButton>
@@ -129,7 +130,10 @@ function Navbar() {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link to="/" style={{ color: "black", textDecoration: "none" }}>
+                <Link
+                  to="/following"
+                  style={{ color: "black", textDecoration: "none" }}
+                >
                   <Typography textAlign="center">Friends</Typography>
                 </Link>
               </MenuItem>
@@ -168,7 +172,8 @@ function Navbar() {
                 }}
               >
                 <CircleNotificationsIcon
-                  style={{ color: "#8A89C0", fontSize: "30px" }}
+                  className="icons"
+                  style={{ color: "#1F7AD3", fontSize: "30px" }}
                 />
               </Button>
             </Link>
@@ -186,16 +191,17 @@ function Navbar() {
                 }}
               >
                 <MailOutlineIcon
-                  style={{ color: "#8A89C0", fontSize: "30px" }}
+                  style={{ color: "#1F7AD3", fontSize: "30px" }}
+                  className="icons"
                 />
               </Button>
             </Link>
-            <Link to="/">
+            <Link to="/following">
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
-                  color: "#8A89C0",
+                  color: "#1F7AD3",
                   display: "block",
                   fontWeight: "700",
                   "&:hover": {
@@ -203,7 +209,13 @@ function Navbar() {
                   },
                 }}
               >
-                <PeopleIcon style={{ color: "#8A89C0", fontSize: "30px" }} />
+                <PeopleIcon
+                  style={{
+                    //  color: "#8A89C0",
+                    fontSize: "30px",
+                  }}
+                  className="icons"
+                />
               </Button>
             </Link>
             <Link to="/profile">
@@ -211,10 +223,11 @@ function Navbar() {
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
-                  color: "#8A89C0",
+                  // color: "#8A89C0",
                   display: "block",
                   fontWeight: "700",
                 }}
+                className="icons"
               >
                 <AccountCircleIcon style={{ fontSize: "30px" }} />
               </Button>
@@ -242,10 +255,11 @@ function Navbar() {
                 </div>
                 <SearchIcon
                   style={{
-                    color: "#8A89C0",
+                    color: "#1F7AD3",
                     position: "absolute",
                     right: "15px",
                   }}
+                  className="icons"
                 />
               </Button>
             </Link>

@@ -53,17 +53,31 @@ export const fetchUsers = createAsyncThunk("news/fetchUsers", async () => {
 //     throw new Error("Failed to delete");
 //   }
 // });
-// export const addUser = createAsyncThunk("news/addUser", async (newItem) => {
-//   try {
-//     const response = await axios.post(
-//       `https://usersapi-2rke.onrender.com/users/`,
-//       newItem
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw new Error("Failed to add");
-//   }
-// });
+export const addPost = createAsyncThunk("users/addPost", async (newItem) => {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const response = await axios.get("https://usersapi-2rke.onrender.com/users");
+  const users = response.data;
+
+  const userToUpdate = users.find(
+    (user) => user.username === loggedInUser.username
+  );
+
+  console.log(userToUpdate);
+  if (userToUpdate) {
+    const updatedPosts = [...userToUpdate.posts, newItem];
+
+    await axios.patch(
+      `https://usersapi-2rke.onrender.com/users/${userToUpdate.id}`,
+      {
+        posts: updatedPosts,
+      }
+    );
+
+    return { ...userToUpdate, posts: updatedPosts };
+  } else {
+    throw new Error("User to follow not found");
+  }
+});
 // /////
 // export const addNotif = createAsyncThunk("news/addNotif", async (newItem) => {
 //   try {

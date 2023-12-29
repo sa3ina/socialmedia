@@ -98,7 +98,7 @@ const MyProfile = () => {
                 justifyContent: "flex-start",
               }}
             >
-              {user?.bio.info}
+              {user?.bio?.info}
             </Typography>
             <Typography
               color="text.secondary"
@@ -108,16 +108,21 @@ const MyProfile = () => {
                 color: "#013566",
               }}
             >
-              {user?.bio.country}
+              {user?.bio?.country}
             </Typography>
             <div style={{ display: "flex", gap: "20px" }}>
               {" "}
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <p>followers</p> <p>{user?.follower.length}</p>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <p>following</p> <p>{user?.following.length}</p>
-              </div>
+              </div>{" "}
+              <Link
+                to="/following"
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <p>following</p> <p>{user?.following.length}</p>
+                </div>
+              </Link>
             </div>
             <div style={{ gap: "10px" }}>
               <button

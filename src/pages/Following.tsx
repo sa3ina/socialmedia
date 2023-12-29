@@ -11,23 +11,23 @@ import { Link } from "react-router-dom";
 
 type Props = {};
 
-const Notifications = (props: Props) => {
+const Following = (props: Props) => {
   const { users, loading, error } = useSelector(
     (state: RootState) => state.user
   );
   let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
-  const foundUser = users.find(
-    (user) =>
-      user?.username?.toLowerCase() === localuser?.username?.toLowerCase()
-  );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
+  const foundUser = users.find(
+    (user) =>
+      user?.username?.toLowerCase() === localuser?.username?.toLowerCase()
+  );
+  const followingIds = foundUser?.following;
 
-  const userWithIdOne = users.find((user) => user.id === foundUser?.id);
-
-  const notificationsForIdOne = userWithIdOne?.notifications;
+  const followingUsers = users.filter((user) => followingIds.includes(user.id));
+  console.log(followingUsers);
 
   return (
     <>
@@ -40,7 +40,7 @@ const Notifications = (props: Props) => {
           flexDirection: "column",
         }}
       >
-        {notificationsForIdOne?.map((notif) => {
+        {followingUsers?.map((user) => {
           return (
             <Container
               style={{
@@ -78,13 +78,13 @@ const Notifications = (props: Props) => {
                 >
                   {" "}
                   <Link
-                    to={`/${notif.id}`}
+                    to={`/${user.id}`}
                     style={{
                       color: "black",
                       textDecoration: "none",
                     }}
                   >
-                    {notif.notifications}
+                    {user.username}
                   </Link>
                 </div>
               </div>
@@ -92,15 +92,14 @@ const Notifications = (props: Props) => {
                 <button
                   style={{
                     marginTop: "8px",
-                    backgroundColor: "#C1111F",
+                    backgroundColor: "#E0F2FF",
                     border: "none",
                     padding: "5px 10px",
                     borderRadius: "5px",
                     cursor: "pointer",
-                    color: "white",
                   }}
                 >
-                  Delete
+                  Unfollow
                 </button>
               </div>
             </Container>
@@ -111,4 +110,4 @@ const Notifications = (props: Props) => {
   );
 };
 
-export default Notifications;
+export default Following;

@@ -20,6 +20,8 @@ import { useParams } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
+import { v4 as uuidv4 } from "uuid";
+import { addPost } from "../redux/slices/userSlice";
 type Props = {};
 
 const Home = (props: Props) => {
@@ -41,6 +43,23 @@ const Home = (props: Props) => {
   const handleClose = () => setOpen(false);
   const [data, setData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [title, setTitle] = useState("");
+  const [imageSrc, setImageSrc] = useState("");
+
+  const handleCreatePost = () => {
+    let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    const newItem = {
+      title: title,
+      imgSRC: imageSrc,
+      postId: uuidv4(),
+      userName: localuser.username,
+    };
+    dispatch(addPost(newItem));
+    setTitle("");
+    setImageSrc("");
+    handleClose();
+  };
   // useEffect(() => {
   //   const token = localStorage.getItem("token");
   //   console.log(token);
@@ -78,12 +97,10 @@ const Home = (props: Props) => {
       setUserData(filteredPosts);
     }
   }, [dispatch]);
-  console.log(userData);
+
   const followingIds = foundUser?.following;
 
   const followingUsers = users.filter((user) => followingIds.includes(user.id));
-
-  console.log(followingUsers);
   return (
     <>
       <Navbar />
@@ -106,11 +123,13 @@ const Home = (props: Props) => {
             <Divider style={{ marginBottom: "10px" }} />
 
             <textarea
-              style={{ width: "100%", border: "none" }}
+              style={{ width: "100%", border: "none", padding: "5px" }}
               name=""
               id=""
               cols="30"
               rows="10"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="What do you have in mind ?"
             ></textarea>
             <div style={{ display: "flex", gap: "130px" }}>
@@ -120,7 +139,13 @@ const Home = (props: Props) => {
                   borderRadius: "7px",
                 }}
               >
-                img <input style={{ border: "none" }} type="text" />
+                img{" "}
+                <input
+                  style={{ border: "none" }}
+                  value={imageSrc}
+                  onChange={(e) => setImageSrc(e.target.value)}
+                  type="text"
+                />
               </button>
               <button
                 style={{
@@ -131,6 +156,7 @@ const Home = (props: Props) => {
                   borderRadius: "5px",
                   cursor: "pointer",
                 }}
+                onClick={handleCreatePost}
               >
                 Create
               </button>
@@ -377,7 +403,7 @@ const Home = (props: Props) => {
                 },
               }}
             >
-              <CardContent>
+              <CardContent style={{ width: "390px" }}>
                 <Typography style={{ fontSize: "20px", marginBottom: "10px" }}>
                   Friends
                 </Typography>
