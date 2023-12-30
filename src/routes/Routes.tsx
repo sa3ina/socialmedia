@@ -8,6 +8,7 @@ import Detail from "../pages/Detail";
 import MyProfile from "../pages/MyProfile";
 import Notifications from "../pages/Notifications";
 import Following from "../pages/Following";
+import Followers from "../pages/Followers";
 export const routes = [
   {
     path: "/",
@@ -48,6 +49,10 @@ export const routes = [
       {
         path: "/following",
         element: <Following />,
+      },
+      {
+        path: "/followers",
+        element: <Followers />,
       },
     ],
   },

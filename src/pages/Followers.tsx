@@ -8,40 +8,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { followUser } from "../redux/slices/userSlice";
 import { unfollowUser } from "../redux/slices/userSlice";
+import { followUser } from "../redux/slices/userSlice";
 type Props = {};
 
-const Search = (props: Props) => {
+const Followers = (props: Props) => {
   const { users, loading, error } = useSelector(
     (state: RootState) => state.user
   );
-
+  let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
   const dispatch = useDispatch();
-  const [search, setSearch] = useState<string>("");
-  const [showResults, setShowResults] = useState<boolean>(false);
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch, users]);
-
-  let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
-  const filteredUsers = (users || []).filter(
-    (item) =>
-      item?.username?.toLowerCase().includes(search.toLowerCase()) &&
-      item.username !== localuser.username
-  );
-  const handleFollowToggle = (userId, isFollowing) => {
-    if (isFollowing) {
-      dispatch(unfollowUser(userId));
-    } else {
-      dispatch(followUser(userId));
-    }
-  };
   const foundUser = users.find(
     (user) =>
       user?.username?.toLowerCase() === localuser?.username?.toLowerCase()
   );
-  const followingIds = foundUser?.following;
+  const followingIds = foundUser?.follower;
+
+  const followingUsers = users.filter((user) => followingIds.includes(user.id));
+
   return (
     <>
       <Navbar />
@@ -53,36 +40,8 @@ const Search = (props: Props) => {
           flexDirection: "column",
         }}
       >
-        <div style={{ position: "relative", width: "60vw" }}>
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => {
-              const inputValue = e.target.value;
-              setSearch(inputValue);
-              setShowResults(!!inputValue);
-            }}
-            style={{
-              borderRadius: "10px",
-              border: "none",
-              backgroundColor: "#F9FAFB",
-              width: "100%",
-              height: "30px",
-              marginBottom: "20px",
-              padding: "0 6px ",
-            }}
-          />{" "}
-          <SearchIcon
-            style={{
-              position: "absolute",
-              color: "#8A89C0",
-              right: "0px",
-              top: "4px",
-            }}
-          />
-        </div>
-        {filteredUsers.map((elem) => {
-          const isFollowing = followingIds && followingIds.includes(elem.id);
+        {followingUsers?.map((user) => {
+          const isFollowing = followingIds && followingIds.includes(user.id);
           return (
             <Container
               style={{
@@ -115,30 +74,18 @@ const Search = (props: Props) => {
                   width: "100%",
                 }}
               >
-                {" "}
-                <div
-                  style={{
-                    minWidth: "50px",
-                    height: "50px",
-                    backgroundColor: "#E2E8F0",
-                    borderRadius: "50%",
-                    position: "absolute",
-
-                    left: "0",
-                  }}
-                ></div>
                 <div
                   style={{ width: "30%", position: "absolute", left: "70px" }}
                 >
                   {" "}
                   <Link
-                    to={`/${elem.id}`}
+                    to={`/${user.id}`}
                     style={{
                       color: "black",
                       textDecoration: "none",
                     }}
                   >
-                    {elem.username}
+                    {user.username}
                   </Link>
                 </div>
               </div>
@@ -152,9 +99,8 @@ const Search = (props: Props) => {
                     borderRadius: "5px",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleFollowToggle(elem.id, isFollowing)}
                 >
-                  {isFollowing ? "Unfollow" : "Follow"}
+                  Message
                 </button>
               </div>
             </Container>
@@ -165,4 +111,4 @@ const Search = (props: Props) => {
   );
 };
 
-export default Search;
+export default Followers;

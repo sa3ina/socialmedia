@@ -112,9 +112,14 @@ const MyProfile = () => {
             </Typography>
             <div style={{ display: "flex", gap: "20px" }}>
               {" "}
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <p>followers</p> <p>{user?.follower.length}</p>
-              </div>{" "}
+              <Link
+                to="/followers"
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <p>followers</p> <p>{user?.follower.length}</p>
+                </div>{" "}
+              </Link>
               <Link
                 to="/following"
                 style={{ color: "black", textDecoration: "none" }}

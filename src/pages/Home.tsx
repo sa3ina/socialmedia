@@ -9,7 +9,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination } from "swiper/modules";
 import App from "../App";
 import PhotoIcon from "@mui/icons-material/Photo";
-import CreateIcon from "@mui/icons-material/Create";
+// import CreateIcon from "@mui/icons-material/Create";
+import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 import { Typography, Card, CardContent } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MessageIcon from "@mui/icons-material/Message";
@@ -319,9 +320,9 @@ const Home = (props: Props) => {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={handleOpen}
+                  // onClick={handleOpen}
                 >
-                  <CreateIcon style={{ color: "#5fa8d3" }} />
+                  <HistoryToggleOffIcon style={{ color: "#5fa8d3" }} />
                 </button>
               </div>
               {userData.map((elem) => {
@@ -448,6 +449,7 @@ const Home = (props: Props) => {
                             border: "none",
                             padding: "5px 10px",
                             borderRadius: "5px",
+                            cursor: "pointer",
                           }}
                         >
                           Chat

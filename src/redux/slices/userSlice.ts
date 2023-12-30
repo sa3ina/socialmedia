@@ -40,19 +40,6 @@ export const fetchUsers = createAsyncThunk("news/fetchUsers", async () => {
     throw new Error("Failed to fetch data");
   }
 });
-// export const deleteUsers = createAsyncThunk("news/deleteUsers", async (id) => {
-//   try {
-//     await axios.delete(`https://usersapi-2rke.onrender.com/users/${id}`);
-//     const response = await axios.get<Users[]>(
-//       "https://usersapi-2rke.onrender.com/users"
-//     );
-//     console.log(response.data);
-//     const updatedUsers = response.data.filter((item) => item.id !== id);
-//     return updatedUsers;
-//   } catch (error) {
-//     throw new Error("Failed to delete");
-//   }
-// });
 export const addPost = createAsyncThunk("users/addPost", async (newItem) => {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const response = await axios.get("https://usersapi-2rke.onrender.com/users");
@@ -78,55 +65,11 @@ export const addPost = createAsyncThunk("users/addPost", async (newItem) => {
     throw new Error("User to follow not found");
   }
 });
-// /////
-// export const addNotif = createAsyncThunk("news/addNotif", async (newItem) => {
-//   try {
-//     const response = await axios.get(
-//       `https://usersapi-2rke.onrender.com/users/`
-//     );
-//     for (const user of response.data) {
-//       await axios.patch(`https://usersapi-2rke.onrender.com/users/${user.id}`, {
-//         notifications: [...user.notifications, newItem],
-//       });
-//     }
-//     console.log("newItem:", newItem);
-//     return response.data;
-//   } catch (error) {
-//     throw new Error("Failed");
-//   }
-// });
-// /////
-// export const deletePost = createAsyncThunk(
-//   "user/deletePost",
-//   async ({ userId, postId }) => {
-//     try {
-//       const response = await axios.get(
-//         `https://usersapi-2rke.onrender.com/users/${userId}`
-//       );
-//       const userData = response.data;
-//       const updatedPosts = userData.posts.filter(
-//         (post) => post.postId !== postId
-//       );
-
-//       await axios.patch(`https://usersapi-2rke.onrender.com/users/${userId}`, {
-//         posts: updatedPosts,
-//       });
-
-//       return { userId, postId };
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// );
 export const followUser = createAsyncThunk(
   "users/followUser",
-  async (userId, { getState }) => {
+  async (userId) => {
     try {
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-      // const loggedInUserId = users.find(
-      //   (user) => user.username === loggedInUser.username
-      // )?.id;
 
       const response = await axios.get(
         "https://usersapi-2rke.onrender.com/users"
@@ -136,17 +79,25 @@ export const followUser = createAsyncThunk(
       const userToUpdate = users.find(
         (user) => user.username === loggedInUser.username
       );
-      if (userToUpdate) {
+      const userToFollow = users.find((user) => user.id === userId);
+      if (userToUpdate && userToFollow) {
         const updatedFollowing = [...userToUpdate.following, userId];
-
-        await axios.patch(
-          `https://usersapi-2rke.onrender.com/users/${userToUpdate.id}`,
-          {
-            following: updatedFollowing,
-          }
-        );
-
-        return { ...userToUpdate, following: updatedFollowing };
+        const updatedFollowers = [...userToFollow.follower, userToUpdate.id];
+        await Promise.all([
+          axios.patch(
+            `https://usersapi-2rke.onrender.com/users/${userToUpdate.id}`,
+            {
+              following: updatedFollowing,
+            }
+          ),
+          axios.patch(
+            `https://usersapi-2rke.onrender.com/users/${userToFollow.id}`,
+            {
+              follower: updatedFollowers,
+            }
+          ),
+        ]);
+        return { userToUpdate, userToFollow };
       } else {
         throw new Error("User to follow not found");
       }
@@ -168,19 +119,32 @@ export const unfollowUser = createAsyncThunk(
       const userToUpdate = users.find(
         (user) => user.username === loggedInUser.username
       );
-      if (userToUpdate) {
+      const userToFollow = users.find((user) => user.id === userId);
+
+      if (userToUpdate && userToFollow) {
         const updatedFollowing = userToUpdate.following.filter(
           (id) => id !== userId
         );
-
-        await axios.patch(
-          `https://usersapi-2rke.onrender.com/users/${userToUpdate.id}`,
-          {
-            following: updatedFollowing,
-          }
+        const updatedFollowers = userToFollow.follower.filter(
+          (id) => id !== userToUpdate.id
         );
 
-        return { ...userToUpdate, following: updatedFollowing };
+        await Promise.all([
+          axios.patch(
+            `https://usersapi-2rke.onrender.com/users/${userToUpdate.id}`,
+            {
+              following: updatedFollowing,
+            }
+          ),
+          axios.patch(
+            `https://usersapi-2rke.onrender.com/users/${userToFollow.id}`,
+            {
+              follower: updatedFollowers,
+            }
+          ),
+        ]);
+
+        return { userToUpdate, userToFollow };
       } else {
         throw new Error("User to unfollow not found");
       }
@@ -195,26 +159,40 @@ export const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // builder.addCase(addNotif.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.users.push(action.payload);
-    // });
     builder.addCase(followUser.fulfilled, (state, action) => {
       state.loading = false;
+      const { userToUpdate, userToFollow } = action.payload;
+
       const updatedUserIndex = state.users.findIndex(
-        (user) => user.id === action.payload.id
+        (user) => user.id === userToUpdate.id
       );
       if (updatedUserIndex !== -1) {
-        state.users[updatedUserIndex] = action.payload;
+        state.users[updatedUserIndex] = userToUpdate;
+      }
+
+      const updatedFollowedUserIndex = state.users.findIndex(
+        (user) => user.id === userToFollow.id
+      );
+      if (updatedFollowedUserIndex !== -1) {
+        state.users[updatedFollowedUserIndex] = userToFollow;
       }
     });
     builder.addCase(unfollowUser.fulfilled, (state, action) => {
       state.loading = false;
+      const { userToUpdate, userToFollow } = action.payload;
+
       const updatedUserIndex = state.users.findIndex(
-        (user) => user.id === action.payload.id
+        (user) => user.id === userToUpdate.id
       );
       if (updatedUserIndex !== -1) {
-        state.users[updatedUserIndex] = action.payload;
+        state.users[updatedUserIndex] = userToUpdate;
+      }
+
+      const updatedFollowedUserIndex = state.users.findIndex(
+        (user) => user.id === userToFollow.id
+      );
+      if (updatedFollowedUserIndex !== -1) {
+        state.users[updatedFollowedUserIndex] = userToFollow;
       }
     });
     builder.addCase(fetchUsers.pending, (state) => {
@@ -229,47 +207,6 @@ export const userSlice = createSlice({
       state.loading = false;
       state.error = action.error.message || "error";
     });
-    // builder.addCase(deleteUsers.pending, (state) => {
-    //   state.loading = true;
-    //   state.error = null;
-    // });
-    // builder.addCase(deleteUsers.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.users = action.payload;
-    // });
-    // builder.addCase(deleteUsers.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload || "error";
-    // });
-    // builder.addCase(addUser.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.users.push(action.payload);
-    // });
-
-    // builder
-    //   .addCase(deletePost.pending, (state) => {
-    //     state.loading = true;
-    //   })
-    //   .addCase(deletePost.fulfilled, (state, action) => {
-    //     state.loading = false;
-    //     state.error = null;
-
-    //     state.users = state.users.map((user) => {
-    //       if (user.id === action.payload.userId) {
-    //         return {
-    //           ...user,
-    //           posts: user.posts.filter(
-    //             (post) => post.postId !== action.payload.postId
-    //           ),
-    //         };
-    //       }
-    //       return user;
-    //     });
-    //   })
-    //   .addCase(deletePost.rejected, (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.error.message;
-    //   });
   },
 });
 
