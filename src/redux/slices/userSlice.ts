@@ -155,6 +155,41 @@ export const followUser = createAsyncThunk(
     }
   }
 );
+export const unfollowUser = createAsyncThunk(
+  "users/unfollowUser",
+  async (userId) => {
+    try {
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      const response = await axios.get(
+        "https://usersapi-2rke.onrender.com/users"
+      );
+      const users = response.data;
+
+      const userToUpdate = users.find(
+        (user) => user.username === loggedInUser.username
+      );
+      if (userToUpdate) {
+        const updatedFollowing = userToUpdate.following.filter(
+          (id) => id !== userId
+        );
+
+        await axios.patch(
+          `https://usersapi-2rke.onrender.com/users/${userToUpdate.id}`,
+          {
+            following: updatedFollowing,
+          }
+        );
+
+        return { ...userToUpdate, following: updatedFollowing };
+      } else {
+        throw new Error("User to unfollow not found");
+      }
+    } catch (error) {
+      throw new Error("Failed to unfollow user");
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "users",
   initialState,
@@ -173,7 +208,15 @@ export const userSlice = createSlice({
         state.users[updatedUserIndex] = action.payload;
       }
     });
-
+    builder.addCase(unfollowUser.fulfilled, (state, action) => {
+      state.loading = false;
+      const updatedUserIndex = state.users.findIndex(
+        (user) => user.id === action.payload.id
+      );
+      if (updatedUserIndex !== -1) {
+        state.users[updatedUserIndex] = action.payload;
+      }
+    });
     builder.addCase(fetchUsers.pending, (state) => {
       state.loading = true;
       state.error = null;

@@ -9,7 +9,7 @@ import { RootState } from "../redux/store";
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { followUser } from "../redux/slices/userSlice";
-
+import { unfollowUser } from "../redux/slices/userSlice";
 type Props = {};
 
 const Search = (props: Props) => {
@@ -22,7 +22,7 @@ const Search = (props: Props) => {
   const [showResults, setShowResults] = useState<boolean>(false);
   useEffect(() => {
     dispatch(fetchUsers());
-  }, [dispatch]);
+  }, [dispatch, users]);
 
   // const filteredUsers = (users || []).filter((item) =>
   //   item?.username?.toLowerCase().includes(search.toLowerCase())
@@ -33,15 +33,18 @@ const Search = (props: Props) => {
       item?.username?.toLowerCase().includes(search.toLowerCase()) &&
       item.username !== localuser.username
   );
-  const handleFollow = (userId) => {
-    dispatch(followUser(userId))
-      .then(() => {
-        console.log("User followed successfully!");
-      })
-      .catch((error) => {
-        console.error("Failed to follow user:", error);
-      });
+  const handleFollowToggle = (userId, isFollowing) => {
+    if (isFollowing) {
+      dispatch(unfollowUser(userId));
+    } else {
+      dispatch(followUser(userId));
+    }
   };
+  const foundUser = users.find(
+    (user) =>
+      user?.username?.toLowerCase() === localuser?.username?.toLowerCase()
+  );
+  const followingIds = foundUser?.following;
   return (
     <>
       <Navbar />
@@ -82,6 +85,7 @@ const Search = (props: Props) => {
           />
         </div>
         {filteredUsers.map((elem) => {
+          const isFollowing = followingIds && followingIds.includes(elem.id);
           return (
             <Container
               style={{
@@ -151,11 +155,9 @@ const Search = (props: Props) => {
                     borderRadius: "5px",
                     cursor: "pointer",
                   }}
-                  onClick={() => {
-                    handleFollow(elem.id);
-                  }}
+                  onClick={() => handleFollowToggle(elem.id, isFollowing)}
                 >
-                  Follow
+                  {isFollowing ? "Unfollow" : "Follow"}
                 </button>
               </div>
             </Container>

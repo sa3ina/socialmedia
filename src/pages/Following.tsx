@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-
+import { unfollowUser } from "../redux/slices/userSlice";
+import { followUser } from "../redux/slices/userSlice";
 type Props = {};
 
 const Following = (props: Props) => {
@@ -19,7 +20,7 @@ const Following = (props: Props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUsers());
-  }, [dispatch]);
+  }, [dispatch, users]);
   const foundUser = users.find(
     (user) =>
       user?.username?.toLowerCase() === localuser?.username?.toLowerCase()
@@ -28,6 +29,14 @@ const Following = (props: Props) => {
 
   const followingUsers = users.filter((user) => followingIds.includes(user.id));
   console.log(followingUsers);
+
+  const handleFollowToggle = (userId, isFollowing) => {
+    if (isFollowing) {
+      dispatch(unfollowUser(userId));
+    } else {
+      dispatch(followUser(userId));
+    }
+  };
 
   return (
     <>
@@ -41,6 +50,7 @@ const Following = (props: Props) => {
         }}
       >
         {followingUsers?.map((user) => {
+          const isFollowing = followingIds && followingIds.includes(user.id);
           return (
             <Container
               style={{
@@ -98,8 +108,9 @@ const Following = (props: Props) => {
                     borderRadius: "5px",
                     cursor: "pointer",
                   }}
+                  onClick={() => handleFollowToggle(user.id, isFollowing)}
                 >
-                  Unfollow
+                  {isFollowing ? "Unfollow" : "Follow"}
                 </button>
               </div>
             </Container>
