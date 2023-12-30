@@ -326,6 +326,7 @@ const Home = (props: Props) => {
                 </button>
               </div>
               {userData.map((elem) => {
+                const user = users.find((x) => x.username === elem.userName);
                 return (
                   <Card style={{ position: "relative", marginBottom: "23px" }}>
                     <CardContent style={{ padding: "60px 0 20px 0" }}>
@@ -349,7 +350,15 @@ const Home = (props: Props) => {
                             borderRadius: "50%",
                           }}
                         ></div>
-                        <p>{elem.userName}</p>
+                        <Link
+                          to={`/${user?.id}`}
+                          style={{
+                            color: "black",
+                            textDecoration: "none",
+                          }}
+                        >
+                          <p>{elem.userName}</p>
+                        </Link>
                       </div>
 
                       <img
@@ -438,7 +447,9 @@ const Home = (props: Props) => {
                           >
                             {elem.username}
                           </Link>
-                          <Typography>120 followers</Typography>
+                          <Typography>
+                            {elem.follower.length} follower
+                          </Typography>
                         </div>
                       </div>
                       <div>

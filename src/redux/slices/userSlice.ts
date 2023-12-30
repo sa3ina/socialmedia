@@ -14,7 +14,7 @@ interface Users {
   blockList: Array;
   stories: Array;
   notifications: Array;
-  bio: Object;
+  bio: { info: String; country: String };
   id: String;
 }
 interface UserState {
