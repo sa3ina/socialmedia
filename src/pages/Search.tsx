@@ -24,7 +24,7 @@ const Search = (props: Props) => {
     dispatch(fetchUsers());
   }, [dispatch, users]);
 
-  let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
+  let localuser = JSON.parse(localStorage.getItem("loggedInUser") || "");
   const filteredUsers = (users || []).filter(
     (item) =>
       item?.username?.toLowerCase().includes(search.toLowerCase()) &&

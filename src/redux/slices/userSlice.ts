@@ -28,7 +28,10 @@ const initialState: UserState = {
   loading: false,
   error: null,
 };
-
+type FollowPayload = {
+  userToUpdate: Users;
+  userToFollow: Users;
+};
 export const fetchUsers = createAsyncThunk("news/fetchUsers", async () => {
   try {
     const response = await axios.get<Users[]>(
@@ -41,12 +44,12 @@ export const fetchUsers = createAsyncThunk("news/fetchUsers", async () => {
   }
 });
 export const addPost = createAsyncThunk("users/addPost", async (newItem) => {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || "");
   const response = await axios.get("https://usersapi-2rke.onrender.com/users");
   const users = response.data;
 
   const userToUpdate = users.find(
-    (user) => user.username === loggedInUser.username
+    (user: any) => user.username === loggedInUser.username
   );
 
   console.log(userToUpdate);
@@ -65,11 +68,13 @@ export const addPost = createAsyncThunk("users/addPost", async (newItem) => {
     throw new Error("User to follow not found");
   }
 });
-export const followUser = createAsyncThunk(
+export const followUser = createAsyncThunk<FollowPayload, string>(
   "users/followUser",
   async (userId) => {
     try {
-      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      const loggedInUser = JSON.parse(
+        localStorage.getItem("loggedInUser") || ""
+      );
 
       const response = await axios.get(
         "https://usersapi-2rke.onrender.com/users"
@@ -77,9 +82,9 @@ export const followUser = createAsyncThunk(
       const users = response.data;
 
       const userToUpdate = users.find(
-        (user) => user.username === loggedInUser.username
+        (user: any) => user.username === loggedInUser.username
       );
-      const userToFollow = users.find((user) => user.id === userId);
+      const userToFollow = users.find((user: any) => user.id === userId);
       if (userToUpdate && userToFollow) {
         const updatedFollowing = [...userToUpdate.following, userId];
         const updatedFollowers = [...userToFollow.follower, userToUpdate.id];
@@ -106,27 +111,29 @@ export const followUser = createAsyncThunk(
     }
   }
 );
-export const unfollowUser = createAsyncThunk(
+export const unfollowUser = createAsyncThunk<FollowPayload, string>(
   "users/unfollowUser",
   async (userId) => {
     try {
-      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      const loggedInUser = JSON.parse(
+        localStorage.getItem("loggedInUser") || ""
+      );
       const response = await axios.get(
         "https://usersapi-2rke.onrender.com/users"
       );
       const users = response.data;
 
       const userToUpdate = users.find(
-        (user) => user.username === loggedInUser.username
+        (user: any) => user.username === loggedInUser.username
       );
-      const userToFollow = users.find((user) => user.id === userId);
+      const userToFollow = users.find((user: any) => user.id === userId);
 
       if (userToUpdate && userToFollow) {
         const updatedFollowing = userToUpdate.following.filter(
-          (id) => id !== userId
+          (id: string) => id !== userId
         );
         const updatedFollowers = userToFollow.follower.filter(
-          (id) => id !== userToUpdate.id
+          (id: string) => id !== userToUpdate.id
         );
 
         await Promise.all([

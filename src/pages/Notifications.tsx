@@ -15,7 +15,7 @@ const Notifications = (props: Props) => {
   const { users, loading, error } = useSelector(
     (state: RootState) => state.user
   );
-  let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
+  let localuser = JSON.parse(localStorage.getItem("loggedInUser") || "");
   const foundUser = users.find(
     (user) =>
       user?.username?.toLowerCase() === localuser?.username?.toLowerCase()
@@ -89,7 +89,7 @@ const Notifications = (props: Props) => {
                 </div>
               </div>
               <div>
-                <button
+                {/* <button
                   style={{
                     marginTop: "8px",
                     backgroundColor: "#C1111F",
@@ -101,7 +101,7 @@ const Notifications = (props: Props) => {
                   }}
                 >
                   Delete
-                </button>
+                </button> */}
               </div>
             </Container>
           );

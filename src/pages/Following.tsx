@@ -16,7 +16,8 @@ const Following = (props: Props) => {
   const { users, loading, error } = useSelector(
     (state: RootState) => state.user
   );
-  let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
+  let localuser = JSON.parse(localStorage.getItem("loggedInUser") || "");
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUsers());

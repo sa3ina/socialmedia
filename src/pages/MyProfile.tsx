@@ -27,7 +27,7 @@ const MyProfile = () => {
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
-  let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
+  let localuser = JSON.parse(localStorage.getItem("loggedInUser") || "");
   console.log(localuser);
   const { id } = useParams();
   const navigate = useNavigate();

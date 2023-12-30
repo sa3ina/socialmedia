@@ -83,7 +83,7 @@ const Home = (props: Props) => {
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
-  let localuser = JSON.parse(localStorage.getItem("loggedInUser"));
+  let localuser = JSON.parse(localStorage.getItem("loggedInUser") || "");
 
   const foundUser = users.find(
     (user) =>
