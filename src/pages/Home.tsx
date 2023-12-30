@@ -96,7 +96,7 @@ const Home = (props: Props) => {
 
       setUserData(filteredPosts);
     }
-  }, [dispatch]);
+  }, [dispatch, users]);
 
   const followingIds = foundUser?.following;
 
