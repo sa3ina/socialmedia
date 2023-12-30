@@ -165,7 +165,7 @@ const Home = (props: Props) => {
         </Modal>
       </div>
       <Container
-        maxWidth="xl"
+        maxWidth="100%"
         style={{
           backgroundColor: "#F9FAFB",
           paddingTop: "20px",
@@ -355,7 +355,7 @@ const Home = (props: Props) => {
                         src={elem.imgSRC}
                         style={{
                           width: "100%",
-                          height: "420px",
+                          height: "480px",
                           objectFit: "cover",
                         }}
                       />
