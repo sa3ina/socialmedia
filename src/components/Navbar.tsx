@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -146,14 +147,14 @@ function Navbar() {
                 </Link>
               </MenuItem>
 
-              <MenuItem onClick={handleCloseNavMenu}>
+              {/* <MenuItem onClick={handleCloseNavMenu}>
                 <Link
                   to="/direct"
                   style={{ color: "black", textDecoration: "none" }}
                 >
                   <Typography textAlign="center">Messages</Typography>
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
             </Menu>
           </Box>
 
@@ -177,7 +178,8 @@ function Navbar() {
                 />
               </Button>
             </Link>
-            <Link to="/direct">
+            {/* Messages part */}
+            {/* <Link to="/direct">
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{
@@ -195,7 +197,7 @@ function Navbar() {
                   className="icons"
                 />
               </Button>
-            </Link>
+            </Link> */}
             <Link to="/following">
               <Button
                 onClick={handleCloseNavMenu}

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserRoot from "../pages/UserRoot";

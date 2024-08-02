@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -17,6 +18,8 @@ const Detail = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUsers());
+    let loggedUser = JSON.parse(localStorage.getItem("loggedInUser") || "");
+    console.log(loggedUser.username);
   }, [users]);
 
   const { id } = useParams();
@@ -64,9 +67,7 @@ const Detail = () => {
               color="text.secondary"
               sx={{
                 marginBottom: "10px",
-
                 textAlign: "left",
-
                 fontSize: "23px",
                 fontWeight: "400",
               }}

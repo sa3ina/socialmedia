@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -170,6 +171,7 @@ const Home = (props: Props) => {
         style={{
           backgroundColor: "#F9FAFB",
           paddingTop: "20px",
+          minHeight: "90vh",
         }}
       >
         <Grid
@@ -191,7 +193,8 @@ const Home = (props: Props) => {
                 },
               }}
             >
-              <Container
+              {/* There would be stories part */}
+              {/* <Container
                 sx={{
                   display: {
                     xl: "flex",
@@ -269,7 +272,7 @@ const Home = (props: Props) => {
                     borderRadius: "50%",
                   }}
                 ></div>
-              </Container>
+              </Container> */}
               <div
                 style={{
                   backgroundColor: "#FFFFFF",

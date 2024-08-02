@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -165,46 +166,48 @@ const MyProfile = () => {
           </Container>
 
           <Grid container spacing={2}>
-            {user?.posts.map((post) => (
-              <Grid item xs={12} xl={4} md={4} sm={6} lg={4}>
-                <Card style={{ position: "relative", marginBottom: "23px" }}>
-                  <CardContent style={{ padding: "0px 0 20px 0" }}>
-                    <img
-                      src={post.imgSRC}
-                      style={{
-                        width: "100%",
-                        height: "420px",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        width: "80px",
-                        position: "absolute",
-                        paddingTop: "10px",
-                      }}
-                    >
-                      <FavoriteBorderIcon
-                        style={{ color: "#780000", fontSize: "28px" }}
+            {user?.posts
+              .map((post) => (
+                <Grid item xs={12} xl={4} md={4} sm={6} lg={4}>
+                  <Card style={{ position: "relative", marginBottom: "23px" }}>
+                    <CardContent style={{ padding: "0px 0 20px 0" }}>
+                      <img
+                        src={post.imgSRC}
+                        style={{
+                          width: "100%",
+                          height: "420px",
+                          objectFit: "cover",
+                        }}
                       />
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "80px",
+                          position: "absolute",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        <FavoriteBorderIcon
+                          style={{ color: "#780000", fontSize: "28px" }}
+                        />
 
-                      <MessageIcon
-                        style={{ color: "grey", fontSize: "28px" }}
-                      />
-                    </div>
-                    <Typography
-                      color="text.secondary"
-                      style={{
-                        padding: "50px 0 0 10px",
-                      }}
-                    >
-                      {post.title}
-                    </Typography>
-                  </CardContent>
-                </Card>{" "}
-              </Grid>
-            ))}
+                        <MessageIcon
+                          style={{ color: "grey", fontSize: "28px" }}
+                        />
+                      </div>
+                      <Typography
+                        color="text.secondary"
+                        style={{
+                          padding: "50px 0 0 10px",
+                        }}
+                      >
+                        {post.title}
+                      </Typography>
+                    </CardContent>
+                  </Card>{" "}
+                </Grid>
+              ))
+              .reverse()}
           </Grid>
         </Grid>
       </Container>

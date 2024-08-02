@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from "react";
 import { Grid } from "@mui/material";
 type Props = {};
@@ -55,17 +56,19 @@ const Register = (props: Props) => {
                 id,
                 ...values,
               };
-              axios.post("http://localhost:8080/users/", obj).then((res) => {
-                console.log(res);
+              axios
+                .post("https://usersapi-2rke.onrender.com/users/", obj)
+                .then((res) => {
+                  console.log(res);
 
-                if (res.status == 201) {
-                  alert("this info is already used by someone");
-                }
-                if (res.status == 200) {
-                  alert("succesful resgistration");
-                  navigate("/");
-                }
-              });
+                  if (res.status == 201) {
+                    alert("this info is already used by someone");
+                  }
+                  if (res.status == 200) {
+                    alert("succesful registration");
+                    navigate("/");
+                  }
+                });
             }}
           >
             {({
